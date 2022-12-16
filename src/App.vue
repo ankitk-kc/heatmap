@@ -1,16 +1,38 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div>
+    <HeatmapCalendarVue @ChangeOnDate="ChangeOnDate" />
+    <ChangesDoneVue :changesDone="changesDone" />
+  </div>
+
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import HelloWorld from './components/HelloWorld.vue';
+import { defineComponent, ref } from 'vue';
+import HeatmapCalendarVue from './components/HeatmapCalendar.vue';
+import ChangesDoneVue from './components/ChangesDone.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    HelloWorld
+    HeatmapCalendarVue,
+    ChangesDoneVue
+  },
+  setup() {
+    const changesDone = ref('')
+    function convertDate(inputFormat: Date) {
+      function pad(s: number) { return (s < 10) ? '0' + s : s; }
+      var d = new Date(inputFormat)
+      return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('-')
+    }
+
+    function ChangeOnDate(arg: string) {
+      const date = new Date(arg)
+      // changesDone.value = "ankit pal"
+      changesDone.value = convertDate(date)
+    }
+
+
+    return { ChangeOnDate, changesDone }
   }
 });
 </script>
